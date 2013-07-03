@@ -11,8 +11,8 @@ Installation
 ============
 You can manually download the following JARs:
 
-	http://www.java2s.com/Code/Jar/j/Downloadjerseyclient115jar.htm, 
-	http://www.java2s.com/Code/Jar/j/Downloadjsonjar.htm, 
+	http://www.java2s.com/Code/Jar/j/Downloadjerseyclient115jar.htm
+	http://www.java2s.com/Code/Jar/j/Downloadjsonjar.htm
 	http://www.java2s.com/Code/Jar/j/Downloadjacksoncoreasl192jar.htm
 
 * jersey-client-1.15.jar
