@@ -1,6 +1,6 @@
 # Agile CRM Java API
 
-Agile CRM is a an new breed CRM. You can sign up here - http://agilecrm.com
+Agile CRM is a new breed CRM. You can sign up here - http://agilecrm.com
 
 Requirements
 ============
