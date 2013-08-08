@@ -8,6 +8,10 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class ContactField
 {
 
+    public ContactField()
+    {
+    }
+
     public static enum FieldName
     {
 	FIRST_NAME("first_name"), LAST_NAME("last_name"), EMAIL("email"), ORGANIZATION(
