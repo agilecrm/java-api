@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import com.agilecrm.api.APIManager;
 import com.agilecrm.api.ContactAPI;
 import com.agilecrm.stubs.Contact;
@@ -66,8 +68,14 @@ public class TestContact
 	    person1.setContactField(FieldName.PHONE, "+48624981");
 	    person1.setContactField(FieldName.WEBSITE,
 		    "http://agile-crm-cloud.appspot.com");
+	    JSONObject address = new JSONObject();
+	    address.put("city", "new delhi");
+	    address.put("state", "delhi");
+	    address.put("country", "india");
+	    person1.setContactField(FieldName.ADDRESS, address.toString());
+	    
 	    person1.setCustomField("Test", "Test Add Custom Field");
-
+	    
 	    tags = new ArrayList<String>();
 	    tags.add("developer");
 	    person1.setTags(tags);
@@ -154,6 +162,9 @@ public class TestContact
 	    contactIds.add(String.valueOf(company.getId()));
 
 	    contactApi.deleteBulkContacts(contactIds);
+
+	    //-------Adds a contact property, updates if it already exists---
+	    contactApi.addProperty("middlename", "crm", "test1@agilecrm.com");
 	}
 	catch (Exception e)
 	{

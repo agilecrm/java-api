@@ -438,28 +438,26 @@ public class ContactAPI
 	return contact;
     }
 
-    /**
-     * Adds the given parameters (property name and property value) to the given
-     * contact, if the property already exists, it is updated.
-     * 
-     * This method is used internally while adding and updating contact
-     * 
-     * @param name
-     *            name of the property to be added
-     * @param value
-     *            value of the property to be added
-     * @param email
-     *            email of the contact
-     * @return
-     */
-    public void addProperty(String name, String value, String email)
-    {
-	ContactField contactField = new ContactField();
-	contactField.setName(name);
-	contactField.setValue(value);
+	/**
+	 * Adds the given parameters (property name and property value) to the given contact,
+	 * if the property already exists, it is updated.
+	 *
+	 * This method is used internally while adding and updating contact property
+	 *
+	 * @param name
+	 *            name of the property to be added
+	 * @param value
+	 *            value of the property to be added
+	 * @param email
+	 *            email of the contact
+	 * @return
+	 */
+	public void addProperty(String name, String value, String email)
+	{
+		ContactField contactField = new ContactField();
+		contactField.setName(name);
+		contactField.setValue(value);
 
-	resource.path("api/contacts/add/property").queryParam("email", email)
-		.post(ContactField.class, contactField);
-    }
-
+		resource.path("api/contacts/add/property").queryParam("email", email).post(Contact.class, contactField);
+	}
 }

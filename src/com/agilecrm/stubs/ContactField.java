@@ -7,16 +7,11 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @XmlRootElement
 public class ContactField
 {
-
-    public ContactField()
-    {
-    }
-
     public static enum FieldName
     {
 	FIRST_NAME("first_name"), LAST_NAME("last_name"), EMAIL("email"), ORGANIZATION(
 		"company"), TITLE("title"), COMPANY("name"), URL("url"), PHONE(
-		"phone"), WEBSITE("website");
+		"phone"), WEBSITE("website"), ADDRESS("address");
 
 	private String fieldName;
 
@@ -35,6 +30,10 @@ public class ContactField
     {
 	SYSTEM, CUSTOM
     };
+
+	public ContactField()
+	{
+	}
 
     @JsonProperty("name")
     private String name;
