@@ -15,7 +15,7 @@ import com.agilecrm.stubs.ContactField.FieldType;
 public class Contact
 {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty("count")
     private Integer count;
@@ -58,12 +58,12 @@ public class Contact
 	PERSON, COMPANY
     };
 
-    public Integer getId()
+    public Long getId()
     {
 	return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
 	this.id = id;
     }
@@ -223,9 +223,11 @@ public class Contact
 	properties.add(contactField);
     }
 
-    public String toString()
-    {
-	return id + " " + type + " " + tags + " " + properties + " "
-		+ created_time + " " + updated_time;
-    }
+    @Override
+	public String toString() {
+		return "Contact [id=" + id + ", count=" + count + ", owner_key="
+				+ owner_key + ", tags=" + tags + ", lead_score=" + lead_score
+				+ ", star_value=" + star_value + ", properties=" + properties.toString()
+				+ ", domainUser=" + domainUser + "]";
+	}
 }
