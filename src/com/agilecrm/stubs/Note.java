@@ -87,7 +87,8 @@ public class Note
     {
 	return contacts;
     }
-
+    
+    @Deprecated
     public void setContacts(List<Contact> contacts)
     {
 	this.contacts = contacts;

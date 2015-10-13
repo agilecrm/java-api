@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
@@ -18,15 +19,17 @@ import com.agilecrm.stubs.ContactField.FieldName;
 import com.agilecrm.stubs.Tag;
 import com.agilecrm.utils.StringUtils;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.representation.Form;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * <code>ContactAPI</code> class contains methods to add, get, update and delete
  * contacts from Agile CRM
  * 
- * @author Tejaswi
- * @since March 2013
+ * @author Ghanshyam
+ * @since Sep 2015
  * @see APIManager
  */
 public class ContactAPI
@@ -266,17 +269,18 @@ public class ContactAPI
      */
     public void deleteBulkContacts(List<String> contactIds) throws Exception
     {
-	System.out.println("Bulk delete contacts -----------------------");
+    	System.out.println("Bulk delete contacts -----------------------");
 
-	if (StringUtils.isNullOrEmpty(contactIds))
-	    throw new Exception("Specify contact ids to delete them");
+		if (StringUtils.isNullOrEmpty(contactIds))
+			throw new Exception("Specify contact ids to delete them");
 
-	Form form = new Form();
-	form.add("model_ids", contactIds);
+		Form form = new Form();
+		form.add("ids", contactIds);
+		
 
-	resource.path("/api/bulk/update").queryParam("action_type", "DELETE")
-		.type(MediaType.APPLICATION_FORM_URLENCODED)
-		.post(ClientResponse.class, form);
+		resource.path("/api/bulk/update").queryParam("action_type", "DELETE")
+				.type(MediaType.APPLICATION_FORM_URLENCODED)
+				.post(ClientResponse.class, form);
 
     }
 
@@ -327,8 +331,7 @@ public class ContactAPI
 
 	Form form = new Form();
 
-	form.add("tags", new JSONArray().put(new JSONObject(new ObjectMapper()
-		.writeValueAsString(tag))));
+	form.add("tags", tag.getTags());
 	form.add("email", email);
 
 	resource.path("/api/contacts/email/tags/add")
@@ -459,5 +462,66 @@ public class ContactAPI
 		contactField.setValue(value);
 
 		resource.path("api/contacts/add/property").queryParam("email", email).post(Contact.class, contactField);
+	}
+	
+	public List<Contact> getContactsByPageCursor(String page,String cursor) {
+		System.out
+				.println("Getting contacts By page and cursor-----------------------");
+		MultivaluedMap queryParams = new MultivaluedMapImpl();
+		queryParams.add("page_size", page);
+		queryParams.add("cursor", cursor);
+		
+		List<Contact> contactCollection = resource.path("/api/contacts")
+			.queryParams(queryParams)
+			.accept(MediaType.APPLICATION_XML).get(new GenericType<List<Contact>>() {});
+
+		return contactCollection;
+	}
+	
+	/**
+	 * Delete tag to the existing contact with email specified in the Agile CRM
+	 * 
+	 * @param tag1
+	 *            {@link Tag} to be added to {@link Contact}
+	 * @param email
+	 *            {@link String} email of the {@link Contact}
+	 * @throws Exception
+	 */
+	public void deleteTagsToEmail(Tag tag1, String email) throws Exception {
+		System.out.println("Deleting tags to contact based on email ------------------");
+
+		Form form = new Form();
+
+		form.add("tags", tag1.getTags());
+		form.add("email", email);
+
+		ClientResponse clientResponse=resource.path("/api/contacts/email/tags/delete")
+				.accept(MediaType.APPLICATION_XML)
+				.post(ClientResponse.class, form);
+		
+        System.out.println("Response code --"+clientResponse.getStatus());
+	}
+	
+	/**
+	 * Add score to the existing contact with email specified in the Agile CRM
+	 * 
+	 * @param score
+	 *            {@link Tag} to be added to {@link Contact}
+	 * @param email
+	 *            {@link String} email of the {@link Contact}
+	 * @throws Exception
+	 */
+	public void addScoreToEmail(String score, String email) {
+
+		Form form = new Form();
+
+		form.add("score", score);
+		form.add("email", email);
+
+		ClientResponse clientResponse=resource.path("/api/contacts/add-score")
+				.accept(MediaType.APPLICATION_XML)
+				.post(ClientResponse.class, form);
+		
+		System.out.println(" Response code = "+clientResponse.getStatus());
 	}
 }

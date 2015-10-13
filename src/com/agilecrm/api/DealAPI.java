@@ -3,20 +3,23 @@ package com.agilecrm.api;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 
 import com.agilecrm.stubs.Deal;
 import com.agilecrm.stubs.DealCollection;
 import com.agilecrm.utils.StringUtils;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.representation.Form;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * <code>DealAPI</code> class contains methods to add, get, update and delete
  * deals from Agile CRM
  * 
- * @author Tejaswi
- * @since March 2013
+ * @author Ghanshyam
+ * @since Sep 2015
  * @see APIManager
  */
 public class DealAPI
@@ -75,7 +78,7 @@ public class DealAPI
      * @return Added {@link Deal}
      * @throws Exception
      */
-    public Deal addDeal(String dealName, Integer probability, Long dealValue,
+    public Deal addDeal(String dealName, Integer probability, Double dealValue,
 	    String mileStone) throws Exception
     {
 	System.out.println("Adding deal ----------------------------------");
@@ -118,7 +121,7 @@ public class DealAPI
      * @throws Exception
      */
     public Deal addDealToContacts(String dealName, Integer probability,
-	    Long dealValue, String mileStone, List<String> contactIds)
+	    Double dealValue, String mileStone, List<String> contactIds)
 	    throws Exception
     {
 	System.out.println("Adding deal ----------------------------------");
@@ -175,11 +178,11 @@ public class DealAPI
 	    throw new Exception("Please specify deal id to get the deal");
 
 	Deal deal = resource.path("api/opportunity/" + dealId)
-		.accept(MediaType.APPLICATION_XML).get(Deal.class);
+		.accept(MediaType.APPLICATION_JSON).get(Deal.class);
 
 	return deal;
     }
-
+    
     /**
      * Updates the {@link Deal} with the given {@link Deal} object
      * 
@@ -191,7 +194,7 @@ public class DealAPI
     public Deal updateDeal(Deal deal)
     {
 	System.out.println("Updating deal --------------------------------");
-
+	
 	deal = resource.path("/api/opportunity").put(Deal.class, deal);
 
 	return deal;
@@ -229,10 +232,24 @@ public class DealAPI
 	    throw new Exception("Please specify deal ids to be deleted");
 
 	Form form = new Form();
-	form.add("model_ids", dealIds);
+	form.add("ids", dealIds);
 	resource.path("api/opportunity/bulk")
 		.type(MediaType.APPLICATION_FORM_URLENCODED)
 		.post(ClientResponse.class, form);
 
     }
+
+	public List<Deal> getDealsByPageSizeAndCursor(String page,String cursor) {
+		System.out.println("Getting deals --------------------------------");
+
+		MultivaluedMap queryParams = new MultivaluedMapImpl();
+		queryParams.add("page_size", page);
+		queryParams.add("cursor", cursor);
+		
+		List<Deal> dealCollection = resource.path("/api/opportunity")
+				.queryParams(queryParams).accept(MediaType.APPLICATION_XML)
+				.get(new GenericType<List<Deal>>() {});
+
+		return dealCollection;
+	}
 }

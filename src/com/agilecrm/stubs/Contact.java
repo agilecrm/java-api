@@ -179,11 +179,23 @@ public class Contact
 	this.owner_key = owner_key;
     }
 
+    /**
+     * Does some thing in old style.
+     *
+     * @deprecated not using any more.  
+     */
+    @Deprecated
     public String getWidget_properties()
     {
 	return widget_properties;
     }
 
+    /**
+     * Does some thing in old style.
+     *
+     * @deprecated not using any more.  
+     */
+    @Deprecated
     public void setWidget_properties(String widget_properties)
     {
 	this.widget_properties = widget_properties;
@@ -215,6 +227,15 @@ public class Contact
     {
 	if (properties == null)
 	    properties = new ArrayList<ContactField>();
+	
+	for (ContactField property : properties)
+	{
+	    if (property.getName().equalsIgnoreCase(fieldName))
+	    {
+		property.setValue(fieldValue);
+		return;
+	    }
+	}
 
 	ContactField contactField = new ContactField();
 	contactField.setName(fieldName);
@@ -223,11 +244,17 @@ public class Contact
 	properties.add(contactField);
     }
 
-    @Override
+	@Override
 	public String toString() {
 		return "Contact [id=" + id + ", count=" + count + ", owner_key="
-				+ owner_key + ", tags=" + tags + ", lead_score=" + lead_score
-				+ ", star_value=" + star_value + ", properties=" + properties.toString()
-				+ ", domainUser=" + domainUser + "]";
+				+ owner_key + ", widget_properties=" + widget_properties
+				+ ", type=" + type + ", tags=" + tags + ", lead_score="
+				+ lead_score + ", star_value=" + star_value + ", properties="
+				+ properties + ", created_time=" + created_time
+				+ ", updated_time=" + updated_time + ", tags_with_time_json="
+				+ tags_with_time_json + ", domainUser=" + domainUser + "]";
 	}
+
+
+
 }

@@ -12,8 +12,8 @@ import com.sun.jersey.api.client.WebResource;
  * <code>NoteAPI</code> contains methods to add, get and delete notes from Agile
  * CRM
  * 
- * @author Tejaswi
- * @since March 2013
+ * @author Ghanshyam
+ * @since Sep 2015
  * @see APIManager
  */
 public class NoteAPI

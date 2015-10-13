@@ -11,8 +11,8 @@ import com.agilecrm.stubs.Deal;
  * <code>TestDeal</Code> class contains main method to test all the methods in
  * <code>DealAPI</code> class
  * 
- * @author Tejaswi
- * @since March 2013
+ * @author Ghanshyam
+ * @since October 2015
  * @see DealAPI
  * 
  */
@@ -31,65 +31,66 @@ public class TestDeal
 
 	    // List of contact id's to which deals are related
 	    List<String> contactIds = new ArrayList<String>();
-	    contactIds.add("967");
-	    contactIds.add("968");
-	    contactIds.add("969");
+	    contactIds.add("5749152860340224");
+	    contactIds.add("5167711998967808"); // Adding Deal to two contact
+						// ids
 
 	    // Adding deal
-	    Deal deal1 = new Deal();
 
-	    deal1.setMilestone("open");
+	    Deal deal1 = new Deal();
+	    deal1.setMilestone("New");
+	    // Milestone name should be exactly like in website
+	    // Example https://{domain}.agilecrm.com/#milestones
 	    deal1.setName("Test Deal1");
 	    deal1.setProbability(50);
-	    deal1.setExpected_value(738295723l);
+	    deal1.setExpected_value(Double.valueOf("600")); // Epoch time in
+							    // second
 	    deal1.setContact_ids(contactIds);
 
 	    deal1 = dealApi.addDeal(deal1);
 
 	    System.out.println("Added deal... " + deal1);
 
-	    // other method to add deal
+	    // Another method to relating deal to contacts
 	    Deal deal2 = new Deal();
 
-	    deal2 = dealApi.addDeal("Test Deal2", 67, 3682965l, "open");
+	    deal2 = dealApi.addDealToContacts("Test Deal2", 76, Double.valueOf("500"), "lost", contactIds);
 
 	    System.out.println("Added deal... " + deal2);
 
-	    // Relating deal to contacts
-	    Deal deal3 = new Deal();
-
-	    deal3 = dealApi.addDealToContacts("Test Deal3", 76, 36865l, "lost",
-		    contactIds);
-
-	    System.out.println("Added deal... " + deal3);
-
 	    // Get all deals
-	    List<Deal> deals = dealApi.getDeals();
+	    List<Deal> deals1 = dealApi.getDeals();
 
-	    System.out.println("All deals..." + deals);
+	    System.out.println("All deals..." + deals1);
 
 	    // Get deal by id
-	    deal1 = dealApi.getDealByDealId(String.valueOf(deal1.getId()));
 
-	    System.out.println("Got deal..." + deal1);
+	    Deal deal3 = dealApi.getDealByDealId("5705327416705024");
+
+	    System.out.println("Got deal..." + deal3);
 
 	    // Update deal
-	    deal1.setMilestone("won");
-	    deal1.setExpected_value(54263532l);
 
-	    deal1 = dealApi.updateDeal(deal1);
+	    deal3.setMilestone("Prospect");
+	    deal3.setExpected_value(Double.valueOf("90"));
 
-	    System.out.println("Updated deal..." + deal1);
+	    System.out.println("Deal before updating" + deal3);
+	    Deal updatedDeal = dealApi.updateDeal(deal3);
+
+	    System.out.println("Updated deal..." + updatedDeal);
 
 	    // Delete deal
-	    dealApi.deleteDealByDealId(String.valueOf(deal1.getId()));
+	    dealApi.deleteDealByDealId("5069845766864896");
+	    System.out.println("Dela is deleted successfully");
 
 	    // Bulk delete deals
 	    List<String> dealIds = new ArrayList<String>();
-	    dealIds.add(String.valueOf(deal2.getId()));
-	    dealIds.add(String.valueOf(deal3.getId()));
+	    dealIds.add("5141023978160128");
+	    dealIds.add("5631930015940608");
+	    dealIds.add("5633226290757632");
 
 	    dealApi.deleteDeals(dealIds);
+	    System.out.println("Three deal deleted successfully");
 	}
 	catch (Exception e)
 	{
@@ -98,5 +99,4 @@ public class TestDeal
 	}
 
     }
-
 }

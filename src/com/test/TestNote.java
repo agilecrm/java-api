@@ -11,8 +11,8 @@ import com.agilecrm.stubs.Note;
  * <code>TestNote</code> class contains main method to test the methods in
  * <code>NoteAPI</code> class.
  * 
- * @author Tejaswi
- * @since March 2013
+ * @author Ghanshyam
+ * @since October 2015
  * @see NoteAPI
  */
 public class TestNote
@@ -30,9 +30,9 @@ public class TestNote
 
 	    // List of contact id's to which notes are added
 	    List<String> contactIds = new ArrayList<String>();
-	    contactIds.add("967");
-	    contactIds.add("968");
-	    contactIds.add("969");
+	    contactIds.add("5648063825707008");
+	    contactIds.add("5692387351330816");
+	    contactIds.add("5645452888244224");
 
 	    // Adding note
 	    Note note1 = new Note();
@@ -64,10 +64,6 @@ public class TestNote
 
 	    System.out.println("Deleted note.. " + noteId + " "
 		    + contactIds.get(0));
-
-	    notes = noteApi.getNotesByContactId(contactIds.get(0));
-
-	    System.out.println("All notes of contact.. " + notes);
 
 	}
 	catch (Exception e)

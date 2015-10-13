@@ -23,9 +23,9 @@ public class AgileConnection
      */
     public static APIManager getConnection() throws Exception
     {
-	String baseUrl = "https://<yourdomain>.agilecrm.com/dev";
-	String userName = "AgileCRM username";
-	String apiKey = "AgileCRM apikey";
+    String baseUrl = "https://<yourdomain>.agilecrm.com/dev";
+    String userName = "AgileCRM username";
+    String apiKey = "AgileCRM apikey";
 
 	// Configures a resource with AGILE CRM credentials
 	APIManager apiManager = new APIManager(baseUrl, userName, apiKey);

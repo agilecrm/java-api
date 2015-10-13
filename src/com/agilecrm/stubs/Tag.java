@@ -1,5 +1,7 @@
 package com.agilecrm.stubs;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -7,23 +9,24 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @XmlRootElement
 public class Tag
 {
-    @JsonProperty("tag")
-    private String tag;
+	@JsonProperty("tags")
+    private List<String> tags;
 
     @JsonProperty("createdTime")
     private Long createdTime = 0l;
 
-    public String getTag()
-    {
-	return tag;
-    }
+   
 
-    public void setTag(String tag)
-    {
-	this.tag = tag;
-    }
 
-    public Long getCreatedTime()
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	public Long getCreatedTime()
     {
 	return createdTime;
     }
