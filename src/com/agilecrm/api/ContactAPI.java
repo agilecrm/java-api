@@ -487,7 +487,7 @@ public class ContactAPI
 	 *            {@link String} email of the {@link Contact}
 	 * @throws Exception
 	 */
-	public void deleteTagsToEmail(Tag tag1, String email) throws Exception {
+	public void deleteTags(Tag tag1, String email) throws Exception {
 		System.out.println("Deleting tags to contact based on email ------------------");
 
 		Form form = new Form();

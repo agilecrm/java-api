@@ -164,6 +164,7 @@ public class Contact
 	return count;
     }
 
+    @Deprecated
     public void setCount(Integer count)
     {
 	this.count = count;

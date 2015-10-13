@@ -42,9 +42,6 @@ public class Deal
     @JsonProperty("owner_id")
     private Long owner_id;
     
-    @JsonProperty("pipeline_id")
-    private Long pipeline_id;
-    
     // Newly added field
     
     @JsonProperty("custom_data")
@@ -59,14 +56,9 @@ public class Deal
     @JsonProperty("note_ids")
     private List<String> note_ids;
     
-    public Long getPipeline_id() {
-		return pipeline_id;
-	}
-
-	public void setPipeline_id(Long pipeline_id) {
-		this.pipeline_id = pipeline_id;
-	}
-
+    @JsonProperty("pipeline_id")
+    private Long pipeline_id;
+    
     public Long getId()
     {
 	return id;
@@ -147,18 +139,13 @@ public class Deal
 	this.created_time = created_time;
     }
 
-    public Long getOwner_id()
-    {
-	return owner_id;
-    }
-
     public List<Contact> getContacts() {
 		return contacts;
 	}
     
     @Deprecated
 	public void setContacts(List<Contact> contacts) {
-		this.contacts = contacts;
+    	this.contacts = contacts;
 	}
 
 	public List<String> getContact_ids()
@@ -170,7 +157,15 @@ public class Deal
     {
 	this.contact_ids = contact_ids;
     }
-
+    
+    public Long getOwner_id()
+    {
+	return owner_id;
+    }
+    
+    public void setOwner_id(Long owner_id) {
+		this.owner_id = owner_id;
+	}
     
     public List<CustomFieldData> getCustom_data() {
 		return custom_data;
@@ -196,19 +191,20 @@ public class Deal
 		this.deal_source_id = deal_source_id;
 	}
 
-
-	public void setOwner_id(Long owner_id) {
-		this.owner_id = owner_id;
-	}
-	
-
-
 	public List<String> getNote_ids() {
 		return note_ids;
 	}
 
 	public void setNote_ids(List<String> note_ids) {
 		this.note_ids = note_ids;
+	}
+	
+	public Long getPipeline_id() {
+		return pipeline_id;
+	}
+
+	public void setPipeline_id(Long pipeline_id) {
+		this.pipeline_id = pipeline_id;
 	}
 
 	@Override

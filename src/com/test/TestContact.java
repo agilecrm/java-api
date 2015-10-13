@@ -148,7 +148,7 @@ public class TestContact
 	    tags.add("alfa2");
 	    tags.add("alfa4");
 	    tag1.setTags(tags);
-		contactApi.deleteTagsToEmail(tag1, "mark@henry.com");
+		contactApi.deleteTags(tag1, "mark@henry.com");
 		System.out.println("Delete tag based on email..............");
 
 	    // ------------ delete contact by contact id --------------------
