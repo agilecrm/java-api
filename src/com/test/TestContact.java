@@ -142,6 +142,13 @@ public class TestContact
 
 	    System.out.println("Added tag based on email..............");
 	    
+	    // ---- Adding tags to contact based on contact id ---------------
+
+	    String TagsJson = "{\"id\":\"5750240208486400\",\"tags\":[\"tag1\", \"tag2\"]}";
+            contactApi.addTagsByContactId(TagsJson);
+
+	    System.out.println("Added tag based on contact id..............");
+	    
 	    // ---------Delete tags to contact based on email ------------------
 	    Tag tag1 = new Tag();
 	    tags = new ArrayList<String>();
