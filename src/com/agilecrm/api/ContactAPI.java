@@ -524,4 +524,27 @@ public class ContactAPI
 		
 		System.out.println(" Response code = "+clientResponse.getStatus());
 	}
+	
+	/**
+	 * Add tags to the existing contact with contact id specified in the Agile CRM
+	 * 
+	 * @param tags Json 
+	 *            
+	 * @throws Exception
+	 */
+	public void addTagsByContactId(String tagsJson) throws Exception {
+		if (tagsJson == null)
+		{
+		    throw new Exception(
+			    "Cannot update a contact without a contact object");
+		}
+
+		ClientResponse clientResponse=resource.path("/api/contacts/edit/tags")
+				.accept(MediaType.APPLICATION_JSON)
+				.type(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class, tagsJson);
+		
+		System.out.println(" Response code = "+clientResponse.getStatus());
+
+	}
 }
