@@ -1,6 +1,7 @@
-# Agile CRM Java API
+Agile CRM Python API 
+=================
 
-Agile CRM is a new breed CRM. You can sign up here - http://agilecrm.com
+[Agile CRM] (https://www.agilecrm.com/) is a new breed CRM software with sales and marketing automation.
 
 Requirements
 ============
