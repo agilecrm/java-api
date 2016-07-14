@@ -12,6 +12,8 @@ Table of contents
 
 **[Reference](#reference)**
 
+**[Usage](#usage)**
+
 Requirements
 ------------
 
@@ -52,6 +54,7 @@ Usage
 
 TestAgile.java
 
+```javascript
 package com.test;
 
 import java.util.ArrayList;
@@ -120,11 +123,11 @@ public class TestAgile
 	}
     }
 }
-
+```
 
 See [TestContact.java](https://github.com/agilecrm/java-api/blob/master/AgileCRMJavaAPI/src/com/test/TestContact.java) for more examples.
 
 Reference
 ------------
 
-See [Agile CRM Rest API](https://github.com/agilecrm/java-api/blob/master/AgileCRMJavaAPI/src/com/test/TestContact.java) for more examples.
+See [Agile CRM Rest API](https://github.com/agilecrm/java-api/blob/master/AgileCRMJavaAPI/src/com/test/TestContact.java) for more information.
