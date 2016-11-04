@@ -14,6 +14,8 @@ Table of contents
 
 **[Usage](#usage)**
 
+**[Video Example using Java](#create-contact)**
+
 Requirements
 ------------
 
@@ -131,3 +133,9 @@ Reference
 ------------
 
 See [Agile CRM Rest API](https://github.com/agilecrm/java-api/blob/master/AgileCRMJavaAPI/src/com/test/TestContact.java) for more information.
+
+
+###Create contact:
+
+<a href="https://www.youtube.com/watch?v=-xRqEJvMjfI&feature=youtu.be" target="_blank"><img src="https://github.com/agilecrm/rest-api/blob/master/api/createContact.PNG" 
+alt="IMAGE ALT TEXT HERE" width="440" height="180" border="10" /></a>
