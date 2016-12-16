@@ -3,6 +3,7 @@ package com.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.api.APIManager;
@@ -105,7 +106,7 @@ public class TestContact
 	    // ------------------- Update Contact properties end -----------------
 
 	    // --------------------- Get contacts -----------------------------
-	    List<Contact> contacts = contactApi.getContacts();
+	    JSONArray contacts = contactApi.getContacts("10","first_page");;
 
 	    System.out.println("All contacts.." + contacts);
 	    
@@ -164,6 +165,10 @@ public class TestContact
 	    // ---------Add Score to a Contact using Email-ID------------------
 	    contactApi.addScoreToEmail("5", "mark@henry.com");
 	    System.out.println("Addedd score based on email..............");
+	    
+	    
+	    // ---------Get contacts by custom field------------------
+	    contactApi.getContactsByDynamicFilter("tags","Lead","5","first_page");
 	}
 	catch (Exception e)
 	{

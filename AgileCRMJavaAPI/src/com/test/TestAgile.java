@@ -19,7 +19,7 @@ public class TestAgile
 	{
 	    String baseUrl = "https://ghanshyam.agilecrm.com/dev";
 	    String userEmail = "ghanshyam.raut@agilecrm.com";
-	    String restAPIKey = "***************************";
+	    String restAPIKey = "123456";
 
 	    // Create a connection to Agile CRM
 	    APIManager apiManager = new APIManager(baseUrl, userEmail, restAPIKey);
@@ -57,7 +57,29 @@ public class TestAgile
 	    tags.add("connection");
 	    person1.setTags(tags);
 
-	    person1 = contactApi.addContact(person1);
+	   // person1 = contactApi.addContact(person1);
+	    
+	   // Update a contact
+	 // ------------------- Update Contact properties ---------------------
+	    String contactDeailJson = "{\"id\":5745111329669120, "
+	    	+ "\"properties\":["
+	    	+ " {\"type\":\"SYSTEM\", \"name\":\"first_name\", \"value\":\"Jason\"}, "
+	    	+ " {\"type\":\"SYSTEM\", \"name\":\"address\", \"value\":'{\"address\":\"225 George Street\",\"city\":\"NSW\",\"state\":\"Sydney\",\"zip\":\"2000\",\"country\":\"Australia\"}'},"
+	    	+ "{\"type\":\"CUSTOM\", \"name\":\"My custom field of type date\", \"value\":\"1481871525\"}]}";
+	    
+            contactApi.updateContactPartialUpdate(contactDeailJson); 
+	    
+	    
+	    
+	    
+	   // ---------Get contacts by filter field------------------
+	   // pass type of filter,filter value,page_size,cursor 
+	   //contactApi.getContactsByDynamicFilter("tags","Lead","5","first_page");
+	    
+	  // Get list of contacts based on page size and cursor 
+	  //contactApi.getContacts("10","first_page");
+	    
+	    
 	}
 	catch (Exception e)
 	{

@@ -1,21 +1,17 @@
 package com.agilecrm.api;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.json.JSONArray;
+
 import com.agilecrm.stubs.Contact;
-import com.agilecrm.stubs.ContactCollection;
 import com.agilecrm.stubs.ContactField;
-import com.agilecrm.stubs.ContactField.FieldName;
 import com.agilecrm.stubs.Tag;
 import com.agilecrm.utils.StringUtils;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.representation.Form;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
@@ -28,8 +24,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
  * @since Sep 2015
  * @see APIManager
  */
-public class ContactAPI
-{
+public class ContactAPI {
     /**
      * Holds a {@link WebResource} object
      */
@@ -42,8 +37,7 @@ public class ContactAPI
      * @param resource
      *            {@link WebResource}
      */
-    ContactAPI(WebResource resource)
-    {
+    ContactAPI(WebResource resource) {
 	this.resource = resource;
     }
 
@@ -55,22 +49,21 @@ public class ContactAPI
      * @return Added {@link Contact}
      * @throws Exception
      */
-    public Contact addContact(Contact contact) throws Exception
-    {
+    public Contact addContact(Contact contact) throws Exception {
 
 	System.out.println("Adding contact -------------------------");
 
-	if (contact == null)
-	{
+	if (contact == null) {
 	    throw new Exception("Cannot add a contact without a contact object");
 	}
 
 	contact = resource.path("/api/contacts")
-		.accept(MediaType.APPLICATION_JSON).post(Contact.class, contact);
+		.accept(MediaType.APPLICATION_JSON)
+		.post(Contact.class, contact);
 
 	return contact;
     }
-    
+
     /**
      * Update a contact to Agile CRM with the given {@link Contact} object
      * 
@@ -79,22 +72,23 @@ public class ContactAPI
      * @return Added {@link Contact}
      * @throws Exception
      */
-    public void updateContactPartialUpdate(String contactDetail) throws Exception
-    {
+    public void updateContactPartialUpdate(String contactDetail)
+	    throws Exception {
 
 	System.out.println("updating contact -------------------------");
 
-	if (contactDetail == null)
-	{
-	    throw new Exception("Cannot update a contact without a contact object");
+	if (contactDetail == null) {
+	    throw new Exception(
+		    "Cannot update a contact without a contact object");
 	}
 
-	ClientResponse clientResponse=resource.path("/api/contacts/edit-properties")
+	ClientResponse clientResponse = resource
+		.path("/api/contacts/edit-properties")
 		.accept(MediaType.APPLICATION_JSON)
 		.type(MediaType.APPLICATION_JSON)
 		.put(ClientResponse.class, contactDetail);
-	
-	System.out.println(" Response code = "+clientResponse.getStatus());
+
+	System.out.println(" Response code = " + clientResponse.getStatus());
     }
 
     /**
@@ -103,14 +97,33 @@ public class ContactAPI
      * @return {@link List} of {@link Contact}
      * @throws Exception
      */
-    public List<Contact> getContacts() throws Exception
-    {
-	System.out.println("Getting contacts -----------------------");
+    public JSONArray getContacts(String page_size, String cursor)
+	    throws Exception {
+	System.out
+		.println("Getting contacts by page and cursor-----------------------");
+	MultivaluedMap<String, String> params = new MultivaluedMapImpl();
 
-	ContactCollection contactCollection = resource.path("/api/contacts")
-		.accept(MediaType.APPLICATION_XML).get(ContactCollection.class);
+	if (page_size == null || page_size.isEmpty())
+	    page_size = "20";
 
-	return contactCollection.getContacts();
+	params.add("page_size", page_size);
+	params.add("global_sort_key", "-created_time");
+
+	if (!cursor.isEmpty() && !cursor.equalsIgnoreCase("first_page"))
+	    params.add("cursor", cursor);
+
+	ClientResponse clientResponse = resource.path("/api/contacts/")
+		.queryParams(params).accept(MediaType.APPLICATION_JSON)
+		.get(ClientResponse.class);
+
+	System.out.println("Status of API = " + clientResponse);
+	JSONArray contacts = null;
+	try {
+	    contacts = new JSONArray(clientResponse.getEntity(String.class));
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	return contacts;
     }
 
     /**
@@ -121,8 +134,7 @@ public class ContactAPI
      * @return {@link Contact}
      * @throws Exception
      */
-    public Contact getContact(String contactId) throws Exception
-    {
+    public Contact getContact(String contactId) throws Exception {
 	System.out.println("Getting contact by id ----------------");
 
 	if (StringUtils.isNullOrEmpty(new String[] { contactId }))
@@ -142,8 +154,7 @@ public class ContactAPI
      * @return {@link Contact}
      * @throws Exception
      */
-    public Contact getContactFromEmail(String email) throws Exception
-    {
+    public Contact getContactFromEmail(String email) throws Exception {
 	System.out.println("Getting contact by email ----------------");
 
 	if (StringUtils.isNullOrEmpty(new String[] { email }))
@@ -162,8 +173,7 @@ public class ContactAPI
      *            {@link String} id of the existing contact
      * @throws Exception
      */
-    public void deleteContact(String contactId) throws Exception
-    {
+    public void deleteContact(String contactId) throws Exception {
 	System.out.println("deleting contact by id -----------------");
 
 	if (StringUtils.isNullOrEmpty(new String[] { contactId }))
@@ -180,20 +190,18 @@ public class ContactAPI
      *            {@link List} of {@link String} contact id's to be deleted
      * @throws Exception
      */
-    public void deleteBulkContacts(List<String> contactIds) throws Exception
-    {
-    	System.out.println("Bulk delete contacts -----------------------");
+    public void deleteBulkContacts(List<String> contactIds) throws Exception {
+	System.out.println("Bulk delete contacts -----------------------");
 
-		if (StringUtils.isNullOrEmpty(contactIds))
-			throw new Exception("Specify contact ids to delete them");
+	if (StringUtils.isNullOrEmpty(contactIds))
+	    throw new Exception("Specify contact ids to delete them");
 
-		Form form = new Form();
-		form.add("ids", contactIds);
-		
+	Form form = new Form();
+	form.add("ids", contactIds);
 
-		resource.path("/api/bulk/update").queryParam("action_type", "DELETE")
-				.type(MediaType.APPLICATION_FORM_URLENCODED)
-				.post(ClientResponse.class, form);
+	resource.path("/api/bulk/update").queryParam("action_type", "DELETE")
+		.type(MediaType.APPLICATION_FORM_URLENCODED)
+		.post(ClientResponse.class, form);
 
     }
 
@@ -208,14 +216,12 @@ public class ContactAPI
      * @throws Exception
      */
     public void addTagsToContacts(List<String> tags, List<String> contactIds)
-	    throws Exception
-    {
+	    throws Exception {
 	System.out
 		.println("Adding tags to contacts based on contact id's ----");
 
 	if (StringUtils.isNullOrEmpty(tags)
-		|| StringUtils.isNullOrEmpty(contactIds))
-	{
+		|| StringUtils.isNullOrEmpty(contactIds)) {
 	    throw new Exception("Tags or contact ids are not provided");
 	}
 
@@ -237,8 +243,7 @@ public class ContactAPI
      *            {@link String} email of the {@link Contact}
      * @throws Exception
      */
-    public void addTagsToEmail(Tag tag, String email) throws Exception
-    {
+    public void addTagsToEmail(Tag tag, String email) throws Exception {
 	System.out
 		.println("Adding tags to contact based on email ------------------");
 
@@ -253,111 +258,134 @@ public class ContactAPI
 
     }
 
+    /**
+     * Adds the given parameters (property name and property value) to the given
+     * contact, if the property already exists, it is updated.
+     *
+     * This method is used internally while adding and updating contact property
+     *
+     * @param name
+     *            name of the property to be added
+     * @param value
+     *            value of the property to be added
+     * @param email
+     *            email of the contact
+     * @return
+     */
+    public void addProperty(String name, String value, String email) {
+	ContactField contactField = new ContactField();
+	contactField.setName(name);
+	contactField.setValue(value);
 
-	/**
-	 * Adds the given parameters (property name and property value) to the given contact,
-	 * if the property already exists, it is updated.
-	 *
-	 * This method is used internally while adding and updating contact property
-	 *
-	 * @param name
-	 *            name of the property to be added
-	 * @param value
-	 *            value of the property to be added
-	 * @param email
-	 *            email of the contact
-	 * @return
-	 */
-	public void addProperty(String name, String value, String email)
-	{
-		ContactField contactField = new ContactField();
-		contactField.setName(name);
-		contactField.setValue(value);
+	resource.path("api/contacts/add/property").queryParam("email", email)
+		.post(Contact.class, contactField);
+    }
 
-		resource.path("api/contacts/add/property").queryParam("email", email).post(Contact.class, contactField);
+    /**
+     * Delete tag to the existing contact with email specified in the Agile CRM
+     * 
+     * @param tag1
+     *            {@link Tag} to be added to {@link Contact}
+     * @param email
+     *            {@link String} email of the {@link Contact}
+     * @throws Exception
+     */
+    public void deleteTags(Tag tag1, String email) throws Exception {
+	System.out
+		.println("Deleting tags to contact based on email ------------------");
+
+	Form form = new Form();
+
+	form.add("tags", tag1.getTags());
+	form.add("email", email);
+
+	ClientResponse clientResponse = resource
+		.path("/api/contacts/email/tags/delete")
+		.accept(MediaType.APPLICATION_XML)
+		.post(ClientResponse.class, form);
+
+	System.out.println("Response code --" + clientResponse.getStatus());
+    }
+
+    /**
+     * Add score to the existing contact with email specified in the Agile CRM
+     * 
+     * @param score
+     *            {@link Tag} to be added to {@link Contact}
+     * @param email
+     *            {@link String} email of the {@link Contact}
+     * @throws Exception
+     */
+    public void addScoreToEmail(String score, String email) {
+
+	Form form = new Form();
+
+	form.add("score", score);
+	form.add("email", email);
+
+	ClientResponse clientResponse = resource
+		.path("/api/contacts/add-score")
+		.accept(MediaType.APPLICATION_JSON)
+		.post(ClientResponse.class, form);
+
+	System.out.println(" Response code = " + clientResponse.getStatus());
+    }
+
+    /**
+     * Add tags to the existing contact with contact id specified in the Agile
+     * CRM
+     * 
+     * @param tags
+     *            Json
+     * 
+     * @throws Exception
+     */
+    public void addTagsByContactId(String tagsJson) throws Exception {
+	if (tagsJson == null) {
+	    throw new Exception(
+		    "Cannot update a contact without a contact object");
 	}
-	
-	public List<Contact> getContactsByPageCursor(String page,String cursor) {
-		System.out
-				.println("Getting contacts By page and cursor-----------------------");
-		MultivaluedMap queryParams = new MultivaluedMapImpl();
-		queryParams.add("page_size", page);
-		queryParams.add("cursor", cursor);
-		
-		List<Contact> contactCollection = resource.path("/api/contacts")
-			.queryParams(queryParams)
-			.accept(MediaType.APPLICATION_XML).get(new GenericType<List<Contact>>() {});
 
-		return contactCollection;
+	ClientResponse clientResponse = resource
+		.path("/api/contacts/edit/tags")
+		.accept(MediaType.APPLICATION_JSON)
+		.type(MediaType.APPLICATION_JSON)
+		.put(ClientResponse.class, tagsJson);
+
+	System.out.println(" Response code = " + clientResponse.getStatus());
+
+    }
+
+    public JSONArray getContactsByDynamicFilter(String filterType,
+	    String filterData, String page, String cursor) {
+	System.out
+		.println("Getting contacts By page and cursor-----------------------");
+	MultivaluedMap<String, String> form = new MultivaluedMapImpl();
+
+	if (page == null || page.isEmpty())
+	    page = "20";
+
+	form.add("page_size", page);
+	form.add("global_sort_key", "-created_time");
+	form.add("filterJson", "{'rules':[{'LHS':'" + filterType
+		+ "','CONDITION':'EQUALS','RHS':'" + filterData
+		+ "'}],'contact_type':'PERSON'}");
+
+	if (!cursor.isEmpty() && !cursor.equalsIgnoreCase("first_page"))
+	    form.add("cursor", cursor);
+
+	ClientResponse clientResponse = resource
+		.path("/api/filters/filter/dynamic-filter")
+		.accept(MediaType.APPLICATION_JSON)
+		.post(ClientResponse.class, form);
+
+	System.out.println("Status of API = " + clientResponse);
+	JSONArray contacts = null;
+	try {
+	    contacts = new JSONArray(clientResponse.getEntity(String.class));
+	} catch (Exception e) {
+	    e.printStackTrace();
 	}
-	
-	/**
-	 * Delete tag to the existing contact with email specified in the Agile CRM
-	 * 
-	 * @param tag1
-	 *            {@link Tag} to be added to {@link Contact}
-	 * @param email
-	 *            {@link String} email of the {@link Contact}
-	 * @throws Exception
-	 */
-	public void deleteTags(Tag tag1, String email) throws Exception {
-		System.out.println("Deleting tags to contact based on email ------------------");
-
-		Form form = new Form();
-
-		form.add("tags", tag1.getTags());
-		form.add("email", email);
-
-		ClientResponse clientResponse=resource.path("/api/contacts/email/tags/delete")
-				.accept(MediaType.APPLICATION_XML)
-				.post(ClientResponse.class, form);
-		
-        System.out.println("Response code --"+clientResponse.getStatus());
-	}
-	
-	/**
-	 * Add score to the existing contact with email specified in the Agile CRM
-	 * 
-	 * @param score
-	 *            {@link Tag} to be added to {@link Contact}
-	 * @param email
-	 *            {@link String} email of the {@link Contact}
-	 * @throws Exception
-	 */
-	public void addScoreToEmail(String score, String email) {
-
-		Form form = new Form();
-
-		form.add("score", score);
-		form.add("email", email);
-
-		ClientResponse clientResponse=resource.path("/api/contacts/add-score")
-				.accept(MediaType.APPLICATION_XML)
-				.post(ClientResponse.class, form);
-		
-		System.out.println(" Response code = "+clientResponse.getStatus());
-	}
-	
-	/**
-	 * Add tags to the existing contact with contact id specified in the Agile CRM
-	 * 
-	 * @param tags Json 
-	 *            
-	 * @throws Exception
-	 */
-	public void addTagsByContactId(String tagsJson) throws Exception {
-		if (tagsJson == null)
-		{
-		    throw new Exception(
-			    "Cannot update a contact without a contact object");
-		}
-
-		ClientResponse clientResponse=resource.path("/api/contacts/edit/tags")
-				.accept(MediaType.APPLICATION_JSON)
-				.type(MediaType.APPLICATION_JSON)
-				.put(ClientResponse.class, tagsJson);
-		
-		System.out.println(" Response code = "+clientResponse.getStatus());
-
-	}
+	return contacts;
+    }
 }
