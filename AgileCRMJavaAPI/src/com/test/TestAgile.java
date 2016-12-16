@@ -17,9 +17,9 @@ public class TestAgile
     {
 	try
 	{
-	    String baseUrl = "https://ghanshyam.agilecrm.com/dev";
-	    String userEmail = "ghanshyam.raut@agilecrm.com";
-	    String restAPIKey = "123456";
+	    String baseUrl = "https://{your_domain}.agilecrm.com/dev";
+	    String userEmail = "ghanshyam@********";
+	    String restAPIKey = "************************";
 
 	    // Create a connection to Agile CRM
 	    APIManager apiManager = new APIManager(baseUrl, userEmail, restAPIKey);
